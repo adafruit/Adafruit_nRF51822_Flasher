@@ -1,0 +1,35 @@
+openocd-0.9.0
+commit date: 17.05.2015 21:08:27
+build date: 19.05.2015
+package date: 19.05.2015
+build system: Linux 4.0.3-1-ARCH #1 SMP PREEMPT Wed May 13 15:38:47 CEST 2015 x86_64 GNU/Linux
+compiler: GCC 5.1.0 for Windows (mingw32-w64)
+
+Libraries used:
+hidapi-0.8.0-rc1
+libftdi-1.2
+libusb-win32-1.2.6.0
+libusb-1.0.19
+
+Build commands used for 32-bit version:
+../configure --host=i686-w64-mingw32 --prefix= --enable-aice --enable-amtjtagaccel --enable-armjtagew --enable-cmsis-dap
+    --enable-dummy --enable-ftdi --enable-gw16012 --enable-jlink --enable-jtag_vpi --enable-legacy-ft2232_libftdi
+    --enable-opendous --enable-openjtag_ftdi --enable-osbdm --enable-parport --disable-parport-ppdev
+    --enable-parport-giveio --enable-presto_libftdi --enable-remote-bitbang --enable-rlink --enable-stlink
+    --enable-ti-icdi --enable-ulink --enable-usb-blaster-2 --enable-usb_blaster_libftdi --enable-usbprog
+    --enable-vsllink
+make bindir="bin" pkgdatadir=
+i686-w64-mingw32-strip src/openocd.exe
+
+Build commands used for 64-bit version:
+../configure --host=x86_64-w64-mingw32 --prefix= --enable-aice --enable-amtjtagaccel --enable-armjtagew
+    --enable-cmsis-dap --enable-dummy --enable-ftdi --enable-gw16012 --enable-jlink --enable-jtag_vpi
+    --enable-legacy-ft2232_libftdi --enable-opendous --enable-openjtag_ftdi --enable-osbdm --enable-parport
+    --disable-parport-ppdev --enable-parport-giveio --enable-presto_libftdi --enable-remote-bitbang --enable-rlink
+    --enable-stlink --enable-ti-icdi --enable-ulink --enable-usb-blaster-2 --enable-usb_blaster_libftdi --enable-usbprog
+    --enable-vsllink
+make bindir="bin-x64" pkgdatadir=
+x86_64-w64-mingw32-strip src/openocd.exe
+
+This package and info about it can be found on Freddie Chopin's website:
+http://www.freddiechopin.info/
