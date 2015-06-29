@@ -34,7 +34,6 @@ def flash_nrf51(jtag, softdevice, bootloader, board, firmware):
     signature_hex = glob.glob(firmware_dir + '/' + firmware + '/' + board + '/*_signature.hex')[0].replace('\\', '/')
     firmware_hex = signature_hex.replace('_signature.hex', '.hex')
 
-
     click.echo('Writing Softdevice + DFU bootloader + Application to flash memory')
     if jtag == 'jlink':
         flash_status = subprocess.call('adalink nrf51822 --wipe --program ' + softdevice_hex + ' ' +
@@ -59,7 +58,6 @@ def flash_nrf51(jtag, softdevice, bootloader, board, firmware):
                     openocd_bin = openocd_dict['Ubuntu']
                 subprocess.call('chmod 755 ' + openocd_bin, shell=True)
                 interface_cfg = 'stlink-v2.cfg'
-
         openocd_cmd = openocd_bin + ' -s ' + openocd_dir + '/scripts -l log.txt ' + '-f interface/' + interface_cfg + ' -f target/nrf51.cfg'
         print openocd_cmd
         flash_status = subprocess.call(openocd_cmd + ' -c init -c "reset init" -c halt -c "nrf51 mass_erase"' +
