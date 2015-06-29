@@ -1,16 +1,20 @@
-# Adafruit_nRF51822_Flasher
-Wrapper for the Segger J-Link or STLink/V2 (via OpenOCD) to flash nRF51822 MCUs
+# Adafruit nRF51822 Flasher
 
-This tool provides a means to flash Bluefruit LE modules with the specified softdevice, bootloader, and firmware using a Segger J-Link or an STLink/V2 connected to the SWD port on the nRF51822.
+The flasher utility is a wrapper for various debuggers to flash nRF51822 MCUs with the official Adafruit firmware images.  Currently supported debuggers are:
+
+- [Segger J-Link](https://www.adafruit.com/search?q=J-Link) (via Adalink)
+- [STLink/V2](https://www.adafruit.com/product/2548) (via OpenOCD)
+- Raspberry Pi GPIO (via OpenOCD)
+
+This tool hides the implementation details of the different debuggers, and provides a means to flash Bluefruit LE modules with the specified softdevice, bootloader, and firmware via the SWD pins on the nRF51822 (SWDIO and SWCLK).
 
 This is useful if you need to de-brick a board that failed a DFU update, or some other unfortunate event.
 
-Since this repo includes [Adafruit_BluefruitLE_Firmware
-](https://github.com/adafruit/Adafruit_BluefruitLE_Firmware) as a submodule, you will need to clone this with --recursive flag
+Since this repo includes [Adafruit_BluefruitLE_Firmware](https://github.com/adafruit/Adafruit_BluefruitLE_Firmware) as a submodule, you will need to clone this with --recursive flag
 
 	git clone --recursive git@github.com:adafruit/Adafruit_nRF51822_Flasher.git
 
-If you previously cloned the repo and the Adafruit_BluefruitLE_Firmware folder is empty, you can still update the submodule via:
+If you previously cloned the repo and the `Adafruit_BluefruitLE_Firmware` folder is empty, you can still update the submodule via:
 
 	git submodule update --init --recursive
 
