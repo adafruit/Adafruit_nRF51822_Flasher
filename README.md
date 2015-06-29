@@ -10,7 +10,7 @@ Since this repo includes [Adafruit_BluefruitLE_Firmware
 
 	git clone --recursive git@github.com:adafruit/Adafruit_nRF51822_Flasher.git
 
-If you already clone the repo with the Adafruit_BluefruitLE_Firmware as empty, you can still update the submodule by
+If you previously cloned the repo and the Adafruit_BluefruitLE_Firmware folder is empty, you can still update the submodule via:
 
 	git submodule update --init --recursive
 
@@ -28,14 +28,15 @@ If you already clone the repo with the Adafruit_BluefruitLE_Firmware as empty, y
 
 ### Jlink Requirements
 
-- git clone adalink, setup install adalink
-- download install jlink driver
+- git clone adalink
+- install and setup adalink
+- download and install jlink driver
 
 ### STLink/V2 Requirements
 
-To use the STLink/V2 you will also need OpenOCD. Pre-built binaries is provided in `openocd-x.x.x` for Windows, Ubuntu, OSX and RPi. If your system is not one of them, you can build it by your on TODO: create a how-to-build-openocd-md.
+To use the STLink/V2 you will also need OpenOCD. Pre-built binaries is provided in `openocd-x.x.x` for Windows, Ubuntu, and RPi. If your system is not one of these options, you can build it by yourself following **TODO: create a how-to-build-openocd-md**.
 
-On a Linux or Raspberry Pi the following steps are required:
+On Linux or Raspberry Pi the following steps are required:
 
 Install libusb:
 
@@ -46,21 +47,21 @@ Configure UDEV permissions:
 	sudo cp openocd-0.9.0/contrib/99-openocd.rules /etc/udev/rules.d/
 	sudo udevadm control --reload-rules
 
-Then reboot
+Then reboot.
 
 ### RPi GPIO Requirements
 
-Use the RPi direct GPIO to bit-banging JTAG/SWD signal, aka RPi native debugger. Pre-built binary is included in the `openocd-x.x.x/rpi_native/openocd`. 
+You can use the RPi's raw GPIO to bit-bang JTAG/SWD signals, turning your RPi into a native debugger.  A pre-built binary is included in the `openocd-x.x.x/rpi_native/openocd` folder.
 
 Install libusb:
 
 	sudo apt-get install libusb-dev libusb-1.0-0-dev
 
-Since accessing RPi's GPIO require root, sudo is required when execute the `flash.py` script
+Since accessing RPi's GPIO requires root access, sudo is required when executing the `flash.py` script:
 
 ![rpi2_swd.png](https://cloud.githubusercontent.com/assets/249515/8327921/59465064-1a96-11e5-802f-827d6707686e.png)
 
-NOTE: Don't forget the GND, there are 4 wires in total.
+NOTE: Don't forget to connect GND, meaning that there are 4 wires in total.
 
 ## Updating Git Submodules
 
