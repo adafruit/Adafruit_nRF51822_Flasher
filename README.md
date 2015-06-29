@@ -5,18 +5,25 @@ This tool provides a means to flash Bluefruit LE modules with the specified soft
 
 This is useful if you need to de-brick a board that failed a DFU update, or some other unfortunate event.
 
-## Requirements
+Since this repo includes [Adafruit_BluefruitLE_Firmware
+](https://github.com/adafruit/Adafruit_BluefruitLE_Firmware) as a submodule, you will need to clone this with --recursive flag
 
+	git clone --recursive git@github.com:adafruit/Adafruit_nRF51822_Flasher.git
+
+If you already clone the repo with the Adafruit_BluefruitLE_Firmware as empty, you can still update the submodule by
+
+	git submodule update --init --recursive
+
+## Requirements
 
 ### General Requirements
 - One of the following SWD debuggers connected to the module via the SWD pins:
 	- [Segger J-Link](https://www.adafruit.com/search?q=J-Link)
 	- [STLink/V2](https://www.adafruit.com/product/2548)
-- Perl (installation required for Windows, already available on OS X and Linux)
 - [Adalink](https://github.com/adafruit/Adafruit_Adalink) installed on your system (A Python JLinkExe wrapper used to flash the device)
-- [IntelHex](https://pythonhosted.org/IntelHex/index.html) Python library:
+- [click](http://click.pocoo.org/4/) Python library:
 	- `sudo apt-get install python-pip`
-	- `sudo pip install intelhex`
+	- `sudo pip install click`
 
 ### STLink/V2 Requirements
 
@@ -45,7 +52,7 @@ If you aren't operating from a git repo, you can fill the `Adafruit_BluefruitLE_
 ## Usage
 
 ```
-perl flash.pl [--board] [--softdevice] [--bootloader] [--firmware]
+python flash.py [--board] [--softdevice] [--bootloader] [--firmware]
   --jtag         debugger either is "jlink" or "stlink", default is "jlink"
   --board        board name, required, example is "blefriend32"
   --softdevice   SD version, default is "8.0.0"
@@ -58,12 +65,12 @@ perl flash.pl [--board] [--softdevice] [--bootloader] [--firmware]
 To flash the blefriend32 module using an STLink/V2 with SD 8.0.0, bootloader ver 2, firmware 0.6.5:
 
 ```
-perl flash.pl --jtag=stlink --board=blefriend32 --softdevice=8.0.0 --bootloader=2 
+python flash.py --jtag=stlink --board=blefriend32 --softdevice=8.0.0 --bootloader=2 
 --firmware=0.6.5
 --jtag           "stlink"
 --board          "blefriend32"
 --softdevice     "8.0.0"
 --bootloader     "2"
 --firmware       "0.6.5"
-Writing SoftDevice and merged DFU Bootload
+Writing SoftDevice + DFU Bootloader + Application
 ```
