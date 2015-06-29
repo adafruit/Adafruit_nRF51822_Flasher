@@ -31,18 +31,36 @@ If you already clone the repo with the Adafruit_BluefruitLE_Firmware as empty, y
 - git clone adalink, setup install adalink
 - download install jlink driver
 
-### STLink/V2 and RPi GPIO Requirements
+### STLink/V2 Requirements
 
-To use the STLink/V2 or RPi GPIO you will also need OpenOCD. (See the [nRF51 OpenOCD Wiki Page](https://github.com/adafruit/Adafruit_nRF51822_Core/wiki/OpenOCD---STLink-V2) for further details).  On a Raspberry Pi the following steps are required:
+To use the STLink/V2 you will also need OpenOCD. Pre-built binaries is provided in `openocd-x.x.x` for Windows, Ubuntu, OSX and RPi. If your system is not one of them, you can build it by your on TODO: create a how-to-build-openocd-md.
+
+On a Linux or Raspberry Pi the following steps are required:
 
 Install libusb:
 
 	sudo apt-get install libusb-dev libusb-1.0-0-dev
 
-Configure UDEV permissions (you may need to log off or reboot):
+Configure UDEV permissions:
 
 	sudo cp openocd-0.9.0/contrib/99-openocd.rules /etc/udev/rules.d/
 	sudo udevadm control --reload-rules
+
+Then reboot
+
+### RPi GPIO Requirements
+
+Use the RPi direct GPIO to bit-banging JTAG/SWD signal, aka RPi native debugger. Pre-built binary is included in the `openocd-x.x.x/rpi_native/openocd`. 
+
+Install libusb:
+
+	sudo apt-get install libusb-dev libusb-1.0-0-dev
+
+Since accessing RPi's GPIO require root, sudo is required when execute the `flash.py` script
+
+![rpi2_swd.png](https://cloud.githubusercontent.com/assets/249515/8327921/59465064-1a96-11e5-802f-827d6707686e.png)
+
+NOTE: Don't forget the GND, there are 4 wires in total.
 
 ## Updating Git Submodules
 
@@ -80,4 +98,4 @@ To flash the blefriend32 module using an STLink/V2 with SD 8.0.0, bootloader ver
 
 To flash the above module with the same firmware using RPi GPIO
 	
-	python flash.py --jtag=rpinative --board=blefriend32 --softdevice=8.0.0 --bootloader=2 --firmware=0.6.5
+	sudo python flash.py --jtag=rpinative --board=blefriend32 --softdevice=8.0.0 --bootloader=2 --firmware=0.6.5
