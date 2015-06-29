@@ -59,6 +59,12 @@ Install libusb:
 
 Since accessing RPi's GPIO requires root access, sudo is required when executing the `flash.py` script:
 
+RPi 1 wiring
+
+![rpi_openocd_swd](https://cloud.githubusercontent.com/assets/249515/8418755/52657200-1edf-11e5-880f-4d80496e725e.png)
+
+RPi 2 wiring
+
 ![rpi2_swd.png](https://cloud.githubusercontent.com/assets/249515/8327921/59465064-1a96-11e5-802f-827d6707686e.png)
 
 NOTE: Don't forget to connect GND, meaning that there are 4 wires in total.
