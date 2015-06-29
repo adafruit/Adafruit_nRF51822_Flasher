@@ -20,14 +20,20 @@ If you already clone the repo with the Adafruit_BluefruitLE_Firmware as empty, y
 - One of the following SWD debuggers connected to the module via the SWD pins:
 	- [Segger J-Link](https://www.adafruit.com/search?q=J-Link)
 	- [STLink/V2](https://www.adafruit.com/product/2548)
+	- Raspberry Pi GPIO
 - [Adalink](https://github.com/adafruit/Adafruit_Adalink) installed on your system (A Python JLinkExe wrapper used to flash the device)
 - [click](http://click.pocoo.org/4/) Python library:
 	- `sudo apt-get install python-pip`
 	- `sudo pip install click`
 
-### STLink/V2 Requirements
+### Jlink Requirements
 
-To use the STLink/V2 you will also need OpenOCD. (See the [nRF51 OpenOCD Wiki Page](https://github.com/adafruit/Adafruit_nRF51822_Core/wiki/OpenOCD---STLink-V2) for further details).  On a Raspberry Pi the following steps are required:
+- git clone adalink, setup install adalink
+- download install jlink driver
+
+### STLink/V2 and RPi GPIO Requirements
+
+To use the STLink/V2 or RPi GPIO you will also need OpenOCD. (See the [nRF51 OpenOCD Wiki Page](https://github.com/adafruit/Adafruit_nRF51822_Core/wiki/OpenOCD---STLink-V2) for further details).  On a Raspberry Pi the following steps are required:
 
 Install libusb:
 
@@ -52,25 +58,26 @@ If you aren't operating from a git repo, you can fill the `Adafruit_BluefruitLE_
 ## Usage
 
 ```
-python flash.py [--board] [--softdevice] [--bootloader] [--firmware]
-  --jtag         debugger either is "jlink" or "stlink", default is "jlink"
-  --board        board name, required, example is "blefriend32"
-  --softdevice   SD version, default is "8.0.0"
-  --bootloader   bootloader verion, default is "2"
-  --firmware     firwmare verion,  required, example is "0.6.5"
+Usage: flash.py [OPTIONS]
+
+  Flash Bluefruit module Softdevice + Bootloader + Firmware
+
+Options:
+  --jtag TEXT           debugger must be "jlink" or "stlink" or "rpinative",
+                        default is "jlink"
+  --softdevice TEXT     Softdevice version e.g "8.0.0"
+  --bootloader INTEGER  Bootloader version e.g "1" or "2".
+  --board TEXT          must be "blefriend32" or "blespislave".
+  --firmware TEXT       Firmware version e.g "0.6.5".
+  --help                Show this message and exit.
 ```
 
 `--firmware` and `--board` options are mandatory.
 
 To flash the blefriend32 module using an STLink/V2 with SD 8.0.0, bootloader ver 2, firmware 0.6.5:
 
-```
-python flash.py --jtag=stlink --board=blefriend32 --softdevice=8.0.0 --bootloader=2 
---firmware=0.6.5
---jtag           "stlink"
---board          "blefriend32"
---softdevice     "8.0.0"
---bootloader     "2"
---firmware       "0.6.5"
-Writing SoftDevice + DFU Bootloader + Application
-```
+	python flash.py --jtag=stlink --board=blefriend32 --softdevice=8.0.0 --bootloader=2 --firmware=0.6.5
+
+To flash the above module with the same firmware using RPi GPIO
+	
+	python flash.py --jtag=rpinative --board=blefriend32 --softdevice=8.0.0 --bootloader=2 --firmware=0.6.5
