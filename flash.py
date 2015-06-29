@@ -59,7 +59,6 @@ def flash_nrf51(jtag, softdevice, bootloader, board, firmware):
                 subprocess.call('chmod 755 ' + openocd_bin, shell=True)
                 interface_cfg = 'stlink-v2.cfg'
         openocd_cmd = openocd_bin + ' -s ' + openocd_dir + '/scripts -l log.txt ' + '-f interface/' + interface_cfg + ' -f target/nrf51.cfg'
-        print openocd_cmd
         flash_status = subprocess.call(openocd_cmd + ' -c init -c "reset init" -c halt -c "nrf51 mass_erase"' +
                                        ' -c "program ' + softdevice_hex + ' verify"' +
                                        ' -c "program ' + bootloader_hex + ' verify"' +
