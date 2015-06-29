@@ -2,9 +2,9 @@
 
 The flasher utility is a wrapper for various debuggers to flash nRF51822 MCUs with the official Adafruit firmware images.  Currently supported debuggers are:
 
-- [Segger J-Link](https://www.adafruit.com/search?q=J-Link) (via Adalink)
-- [STLink/V2](https://www.adafruit.com/product/2548) (via OpenOCD)
-- Raspberry Pi GPIO (via OpenOCD)
+- [Segger J-Link](https://www.adafruit.com/search?q=J-Link) (via [Adalink](https://github.com/adafruit/Adafruit_Adalink))
+- [STLink/V2](https://www.adafruit.com/product/2548) (via OpenOCD, included in this repo)
+- Raspberry Pi GPIO (via OpenOCD, included in this repo)
 
 This tool hides the implementation details of the different debuggers, and provides a means to flash Bluefruit LE modules with the specified softdevice, bootloader, and firmware via the SWD pins on the nRF51822 (SWDIO and SWCLK).
 
