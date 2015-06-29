@@ -1,0 +1,3 @@
+[submodule "Adafruit_BluefruitLE_Firmware"]
+	path = Adafruit_BluefruitLE_Firmware
+	url = git@github.com:adafruit/Adafruit_BluefruitLE_Firmware.git
