@@ -36,23 +36,13 @@ def flash_nrf51(jtag, softdevice, bootloader, board, firmware):
     click.echo('bootloader \t: %s' % bootloader)
     click.echo('board      \t: %s' % board)
     click.echo('firmware   \t: %s' % firmware)
+
     softdevice_hex = glob.glob( firmware_dir + '/softdevice/*' + softdevice + '_softdevice.hex' )[0].replace('\\', '/')
     bootloader_hex = glob.glob( firmware_dir + '/bootloader/*' + str(bootloader) + '.hex' )[0].replace('\\', '/')
     firmware_hex   = glob.glob( firmware_dir + '/' + firmware + '/' + board + '/*.hex' )[0].replace('\\', '/')
-    firmware_bin   = firmware_hex.replace('.hex', '.bin')
     signature_hex  = firmware_hex.replace('.hex', '_signature.hex')
-    signature_bin  = firmware_hex.replace('.hex', '_signature.bin')
 
-    # Convert firmware from hex to bin
-    intelhex.hex2bin(firmware_hex, firmware_bin)
-
-    # Generate _signature.bin based on firmware.bin
-    subprocess.call('python pynrfbintool.py -q ' + firmware_bin)
-
-    # Convert _signature.bin to hex
-    intelhex.bin2hex(signature_bin, signature_hex, BOOTLOADER_SETTING_ADDR)
-
-    click.echo('Writing Softdevice + DFU bootloader + application to flash memory')
+    click.echo('Writing Softdevice + DFU bootloader + Application to flash memory')
     if jtag == 'jlink':
         flash_status = subprocess.call('adalink nrf51822 --wipe --program ' + softdevice_hex + ' ' +
                   bootloader_hex + ' ' +
@@ -70,10 +60,6 @@ def flash_nrf51(jtag, softdevice, bootloader, board, firmware):
         print "Flash FAILED"
     else:
         print "Flash OK"
-
-    os.remove(firmware_bin)
-    os.remove(signature_bin)
-    os.remove(signature_hex)
 
 if __name__ == '__main__':
     flash_nrf51()
