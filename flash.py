@@ -40,8 +40,9 @@ def flash_nrf51(jtag, softdevice, bootloader, board, firmware):
 
     softdevice_hex = glob.glob(firmware_dir + '/softdevice/*' + softdevice + '_softdevice.hex')[0].replace('\\', '/')
     bootloader_hex = glob.glob(firmware_dir + '/bootloader/*' + str(bootloader) + '.hex')[0].replace('\\', '/')
-    firmware_hex = glob.glob(firmware_dir + '/' + firmware + '/' + board + '/*.hex')[0].replace('\\', '/')
-    signature_hex = firmware_hex.replace('.hex', '_signature.hex')
+    signature_hex = glob.glob(firmware_dir + '/' + firmware + '/' + board + '/*_signature.hex')[0].replace('\\', '/')
+    firmware_hex = signature_hex.replace('_signature.hex', '.hex')
+
 
     click.echo('Writing Softdevice + DFU bootloader + Application to flash memory')
     if jtag == 'jlink':
