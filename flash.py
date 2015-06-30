@@ -67,6 +67,7 @@ def flash_nrf51(jtag, softdevice, bootloader, board, firmware):
                                        ' -c reset -c exit', shell=True)
     else:
         print 'unsupported debugger'
+        sys.exit()
 
     if flash_status != 0:
         print "Flash FAILED"
