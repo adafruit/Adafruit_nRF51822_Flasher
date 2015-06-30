@@ -13,10 +13,10 @@ openocd_dict = {'Windows': openocd_dir + '/win64/openocd.exe',
                 'Darwin': 'openocd',
                 'Ubuntu': openocd_dir + '/ubuntu/openocd',
                 'RPi': openocd_dir + '/rpi/openocd',
-                'RPi_native': openocd_dir + '/rpi_native/openocd'}
+                'RPi_gpio': openocd_dir + '/rpi_gpio/openocd'}
 
 @click.command()
-@click.option('--jtag', default='jlink', help='debugger must be "jlink" or "stlink" or "rpinative", default is "jlink"')
+@click.option('--jtag', default='jlink', help='debugger must be "jlink" or "stlink" or "rpigpio", default is "jlink"')
 @click.option('--softdevice', default='8.0.0', help='Softdevice version e.g "8.0.0"')
 @click.option('--bootloader', default=2, help='Bootloader version e.g "1" or "2".')
 @click.option('--board', help='must be "blefriend32" or "blespislave".')
@@ -39,12 +39,12 @@ def flash_nrf51(jtag, softdevice, bootloader, board, firmware):
         flash_status = subprocess.call('adalink nrf51822 --wipe --program ' + softdevice_hex + ' ' +
                                        bootloader_hex + ' ' +
                                        firmware_hex + ' ' + signature_hex, shell=True)
-    elif (jtag == 'stlink') or (jtag == 'rpinative'):
-        if (jtag == 'rpinative'):
+    elif (jtag == 'stlink') or (jtag == 'rpigpio'):
+        if (jtag == 'rpigpio'):
             if (Platform.platform_detect() != Platform.RASPBERRY_PI):
                 sys.exit()
             else:
-                openocd_bin = openocd_dict['RPi_native']
+                openocd_bin = openocd_dict['RPi_gpio']
                 subprocess.call('chmod 755 ' + openocd_bin, shell=True)
                 interface_cfg = 'raspberrypi' + ('2' if Platform.pi_version() == 2 else '') + '-native.cfg'
                 interface_cfg = interface_cfg + ' -c "transport select swd" -c "set WORKAREASIZE 0"'

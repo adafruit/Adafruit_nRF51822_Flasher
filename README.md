@@ -92,7 +92,7 @@ Usage: flash.py [OPTIONS]
   Flash Bluefruit module Softdevice + Bootloader + Firmware
 
 Options:
-  --jtag TEXT           debugger must be "jlink" or "stlink" or "rpinative",
+  --jtag TEXT           debugger must be "jlink" or "stlink" or "rpigpio",
                         default is "jlink"
   --softdevice TEXT     Softdevice version e.g "8.0.0"
   --bootloader INTEGER  Bootloader version e.g "1" or "2".
@@ -109,4 +109,4 @@ To flash the blefriend32 module using an STLink/V2 with SD 8.0.0, bootloader ver
 
 To flash the above module with the same firmware using RPi GPIO
 	
-	sudo python flash.py --jtag=rpinative --board=blefriend32 --softdevice=8.0.0 --bootloader=2 --firmware=0.6.5
+	sudo python flash.py --jtag=rpigpio --board=blefriend32 --softdevice=8.0.0 --bootloader=2 --firmware=0.6.5
