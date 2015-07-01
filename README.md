@@ -96,7 +96,7 @@ Options:
                         default is "jlink"
   --softdevice TEXT     Softdevice version e.g "8.0.0"
   --bootloader INTEGER  Bootloader version e.g "1" or "2".
-  --board TEXT          must be "blefriend32" or "blespislave".
+  --board TEXT          must be "blefriend32" or "blespifriend".
   --firmware TEXT       Firmware version e.g "0.6.5".
   --help                Show this message and exit.
 ```

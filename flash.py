@@ -19,7 +19,7 @@ openocd_dict = {'Windows': openocd_dir + '/win64/openocd.exe',
 @click.option('--jtag', default='jlink', help='debugger must be "jlink" or "stlink" or "rpigpio", default is "jlink"')
 @click.option('--softdevice', default='8.0.0', help='Softdevice version e.g "8.0.0"')
 @click.option('--bootloader', default=2, help='Bootloader version e.g "1" or "2".')
-@click.option('--board', help='must be "blefriend32" or "blespislave".')
+@click.option('--board', help='must be "blefriend32" or "blespifriend".')
 @click.option('--firmware', default='0.6.5', help='Firmware version e.g "0.6.5".')
 def flash_nrf51(jtag, softdevice, bootloader, board, firmware):
     """Flash Bluefruit module Softdevice + Bootloader + Firmware"""
