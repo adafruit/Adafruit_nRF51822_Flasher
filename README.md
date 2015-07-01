@@ -1,5 +1,18 @@
 # Adafruit nRF51822 Flasher
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [Requirements](#requirements)
+  - [General Requirements](#general-requirements)
+  - [Jlink Requirements](#jlink-requirements)
+  - [STLink/V2 Requirements](#stlinkv2-requirements)
+  - [RPi GPIO Requirements](#rpi-gpio-requirements)
+- [Usage](#usage)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 The flasher utility is a wrapper for various debuggers to flash nRF51822 MCUs with the official Adafruit firmware images.  Currently supported debuggers are:
 
 - [Segger J-Link](https://www.adafruit.com/search?q=J-Link) (via [Adalink](https://github.com/adafruit/Adafruit_Adalink))
@@ -10,13 +23,18 @@ This tool hides the implementation details of the different debuggers, and provi
 
 This is useful if you need to de-brick a board that failed a DFU update, or some other unfortunate event.
 
-Since this repo includes [Adafruit_BluefruitLE_Firmware](https://github.com/adafruit/Adafruit_BluefruitLE_Firmware) as a submodule, you will need to clone this with --recursive flag
+The [Adafruit_BluefruitLE_Firmware](https://github.com/adafruit/Adafruit_BluefruitLE_Firmware) folder is setup as a git submodule, linked to an external repo. you will need to clone this with --recursive flag
 
 	git clone --recursive git@github.com:adafruit/Adafruit_nRF51822_Flasher.git
 
-If you previously cloned the repo and the `Adafruit_BluefruitLE_Firmware` folder is empty, you can still update the submodule via:
+If the folder is empty, you will need to run the following commands to fill it:
 
-	git submodule update --init --recursive
+	git submodule init
+	git submodule update
+
+If you aren't operating from a git repo, you can fill the `Adafruit_BluefruitLE_Firmware` folder from the command-line with the following command:
+
+	git clone git@github.com:adafruit/Adafruit_BluefruitLE_Firmware.git
 
 ## Requirements
 
@@ -63,26 +81,15 @@ Install libusb:
 
 Since accessing RPi's GPIO requires root access, sudo is required when executing the `flash.py` script:
 
-RPi 1 wiring
+**RPi 1 wiring**
 
 ![rpi_openocd_swd](https://cloud.githubusercontent.com/assets/249515/8418755/52657200-1edf-11e5-880f-4d80496e725e.png)
 
-RPi 2 wiring
+**RPi 2 wiring**
 
 ![rpi2_swd.png](https://cloud.githubusercontent.com/assets/249515/8327921/59465064-1a96-11e5-802f-827d6707686e.png)
 
 NOTE: Don't forget to connect GND, meaning that there are 4 wires in total.
-
-## Updating Git Submodules
-
-The [Adafruit_BluefruitLE_Firmware](https://github.com/adafruit/Adafruit_BluefruitLE_Firmware) folder is setup as a git submodule, linked to an external repo.  If the folder is empty, you will need to run the following commands to fill it:
-
-	git submodule init
-	git submodule update
-
-If you aren't operating from a git repo, you can fill the `Adafruit_BluefruitLE_Firmware` folder from the command-line with the following command:
-
-	git clone git@github.com:adafruit/Adafruit_BluefruitLE_Firmware.git
 
 ## Usage
 
