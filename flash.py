@@ -49,6 +49,7 @@ def flash_nrf51(jtag, softdevice, bootloader, board, firmware):
                 interface_cfg = 'raspberrypi' + ('2' if Platform.pi_version() == 2 else '') + '-native.cfg'
                 interface_cfg = interface_cfg + ' -c "transport select swd" -c "set WORKAREASIZE 0"'
         else:
+            interface_cfg = 'stlink-v2.cfg'
             if platform.system() != 'Linux':
                 openocd_bin = openocd_dict[platform.system()]
             else:
@@ -59,12 +60,13 @@ def flash_nrf51(jtag, softdevice, bootloader, board, firmware):
                 subprocess.call('chmod 755 ' + openocd_bin, shell=True)
                 interface_cfg = 'stlink-v2.cfg'
         openocd_cmd = openocd_bin + ' -s ' + openocd_dir + '/scripts -l log.txt ' + '-f interface/' + interface_cfg + ' -f target/nrf51.cfg'
+        print openocd_cmd
         flash_status = subprocess.call(openocd_cmd + ' -c init -c "reset init" -c halt -c "nrf51 mass_erase"' +
                                        ' -c "program ' + softdevice_hex + ' verify"' +
                                        ' -c "program ' + bootloader_hex + ' verify"' +
                                        ' -c "program ' + firmware_hex + ' verify"' +
                                        ' -c "program ' + signature_hex + ' verify"' +
-                                       ' -c reset -c exit', shell=True)
+                                       ' -c reset -c exit', shell=True if platform.system() != 'Windows' else False)
     else:
         print 'unsupported debugger'
         sys.exit()
