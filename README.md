@@ -71,6 +71,18 @@ Configure UDEV permissions:
 
 Then reboot.
 
+** STLink/V2 to Bluefruit LE Pinout **
+
+The following pins on the STLink/V2 need to be connected to the Bluefruit LE module:
+
+STLink/V2 | Bluefruit LE
+--------- | --------
+RST       | RST
+SWCLK     | SWCLK
+SWDIO     | SWDIO
+GND       | GND
+3.3V      | VIN
+
 ### RPi GPIO Requirements
 
 You can use the RPi's raw GPIO to bit-bang JTAG/SWD signals, turning your RPi into a native debugger.  A pre-built binary is included in the `openocd-x.x.x/rpi_native/openocd` folder.
