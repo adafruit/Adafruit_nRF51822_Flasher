@@ -71,7 +71,7 @@ Configure UDEV permissions:
 
 Then reboot.
 
-** STLink/V2 to Bluefruit LE Pinout **
+**STLink/V2 to Bluefruit LE Pinout**
 
 The following pins on the STLink/V2 need to be connected to the Bluefruit LE module:
 
