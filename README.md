@@ -85,7 +85,7 @@ GND       | GND
 
 ### RPi GPIO Requirements
 
-You can use the RPi's raw GPIO to bit-bang JTAG/SWD signals, turning your RPi into a native debugger.  A pre-built binary is included in the `openocd-x.x.x/rpi_native/openocd` folder.
+You can use the RPi's raw GPIO to bit-bang JTAG/SWD signals, turning your RPi into a native debugger.  A pre-built binary is included in the `openocd-x.x.x/rpi_gpio/openocd` folder.
 
 Install libusb:
 
