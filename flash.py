@@ -29,6 +29,10 @@ def flash_nrf51(jtag, softdevice, bootloader, board, firmware):
     click.echo('board      \t: %s' % board)
     click.echo('firmware   \t: %s' % firmware)
 
+    if board is None:
+        print "Please specify the board either blefriend32 or blespifriend"
+        sys.exit(1)
+
     softdevice_hex = glob.glob(firmware_dir + '/softdevice/*' + softdevice + '_softdevice.hex')[0].replace('\\', '/')
     bootloader_hex = glob.glob(firmware_dir + '/bootloader/*' + str(bootloader) + '.hex')[0].replace('\\', '/')
     signature_hex = glob.glob(firmware_dir + '/' + firmware + '/' + board + '/*_signature.hex')[0].replace('\\', '/')
@@ -36,9 +40,10 @@ def flash_nrf51(jtag, softdevice, bootloader, board, firmware):
 
     click.echo('Writing Softdevice + DFU bootloader + Application to flash memory')
     if jtag == 'jlink':
-        flash_status = subprocess.call('adalink nrf51822 --wipe --program ' + softdevice_hex + ' ' +
-                                       bootloader_hex + ' ' +
-                                       firmware_hex + ' ' + signature_hex, shell=True)
+        flash_status = subprocess.call('adalink nrf51822 --programmer jlink --wipe --program-hex ' + softdevice_hex +
+                                       ' --program-hex ' + bootloader_hex +
+                                       ' --program-hex ' + firmware_hex +
+                                       ' --program-hex ' + signature_hex, shell=True)
     elif (jtag == 'stlink') or (jtag == 'rpigpio'):
         if (jtag == 'rpigpio'):
             if (Platform.platform_detect() != Platform.RASPBERRY_PI):
