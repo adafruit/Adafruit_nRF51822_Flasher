@@ -6,6 +6,9 @@ import glob
 import Platform
 import sys
 
+supported_boards = ('blefriend32', 'blespifriend')
+supported_programmers = ('jlink', 'stlink', 'rpigpio')
+
 firmware_dir = 'Adafruit_BluefruitLE_Firmware'
 openocd_dir = 'openocd-0.9.0'
 
@@ -16,11 +19,11 @@ openocd_dict = {'Windows': openocd_dir + '/win64/openocd.exe',
                 'RPi_gpio': openocd_dir + '/rpi_gpio/openocd'}
 
 @click.command()
-@click.option('--jtag', default='jlink', help='debugger must be "jlink" or "stlink" or "rpigpio", default is "jlink"')
-@click.option('--softdevice', default='8.0.0', help='Softdevice version e.g "8.0.0"')
-@click.option('--bootloader', default=2, help='Bootloader version e.g "1" or "2".')
-@click.option('--board', help='must be "blefriend32" or "blespifriend".')
-@click.option('--firmware', default='0.6.5', help='Firmware version e.g "0.6.5".')
+@click.option('--jtag', default='jlink', help='[Optional] debugger must be "jlink" or "stlink" or "rpigpio", default is "jlink"')
+@click.option('--softdevice', default='8.0.0', help='[Optional] Softdevice version e.g "8.0.0"')
+@click.option('--bootloader', default=2, help='[Optional] Bootloader version e.g "1" or "2".')
+@click.option('--board', help='[Mandatory] must be "blefriend32" or "blespifriend".')
+@click.option('--firmware', help='[Mandatory] Firmware version e.g "0.6.5".')
 def flash_nrf51(jtag, softdevice, bootloader, board, firmware):
     """Flash Bluefruit module Softdevice + Bootloader + Firmware"""
     click.echo('jtag       \t: %s' % jtag)
@@ -29,8 +32,16 @@ def flash_nrf51(jtag, softdevice, bootloader, board, firmware):
     click.echo('board      \t: %s' % board)
     click.echo('firmware   \t: %s' % firmware)
 
-    if board is None:
-        print "Please specify the board either blefriend32 or blespifriend"
+    if (board is None) or (board not in supported_boards):
+        print "Please specify the board either " + ', '.join(supported_boards)
+        sys.exit(1)
+
+    if firmware is None:
+        print "Please specify the firmware version e.g: 0.6.5"
+        sys.exit(1)
+
+    if jtag not in supported_programmers:
+        print "Unsupported programmer, please specify one of following: " + ', '.join(supported_programmers)
         sys.exit(1)
 
     softdevice_hex = glob.glob(firmware_dir + '/softdevice/*' + softdevice + '_softdevice.hex')[0].replace('\\', '/')
@@ -39,12 +50,18 @@ def flash_nrf51(jtag, softdevice, bootloader, board, firmware):
     firmware_hex = signature_hex.replace('_signature.hex', '.hex')
 
     click.echo('Writing Softdevice + DFU bootloader + Application to flash memory')
-    if jtag == 'jlink':
-        flash_status = subprocess.call('adalink nrf51822 --programmer jlink --wipe --program-hex ' + softdevice_hex +
-                                       ' --program-hex ' + bootloader_hex +
-                                       ' --program-hex ' + firmware_hex +
-                                       ' --program-hex ' + signature_hex, shell=True)
-    elif (jtag == 'stlink') or (jtag == 'rpigpio'):
+    if (jtag == 'jlink') or (jtag == 'stlink'):
+        print ('adalink -v nrf51822 --programmer ' + jtag +
+                                        ' --wipe --program-hex "' + softdevice_hex + '"' +
+                                        ' --program-hex "' + bootloader_hex + '"' +
+                                        ' --program-hex "' + firmware_hex + '"' +
+                                        ' --program-hex "' + signature_hex + '"')
+        flash_status = subprocess.call('adalink -v nrf51822 --programmer ' + jtag +
+                                       ' --wipe --program-hex "' + softdevice_hex + '"' +
+                                       ' --program-hex "' + bootloader_hex + '"' +
+                                       ' --program-hex "' + firmware_hex + '"' +
+                                       ' --program-hex "' + signature_hex + '"', shell=True)
+    elif (jtag == 'rpigpio'): # or (jtag == 'stlink'):
         if (jtag == 'rpigpio'):
             if (Platform.platform_detect() != Platform.RASPBERRY_PI):
                 sys.exit()
@@ -65,7 +82,6 @@ def flash_nrf51(jtag, softdevice, bootloader, board, firmware):
                 subprocess.call('chmod 755 ' + openocd_bin, shell=True)
                 interface_cfg = 'stlink-v2.cfg'
         openocd_cmd = openocd_bin + ' -s ' + openocd_dir + '/scripts -l log.txt ' + '-f interface/' + interface_cfg + ' -f target/nrf51.cfg'
-        print openocd_cmd
         flash_status = subprocess.call(openocd_cmd + ' -c init -c "reset init" -c halt -c "nrf51 mass_erase"' +
                                        ' -c "program ' + softdevice_hex + ' verify"' +
                                        ' -c "program ' + bootloader_hex + ' verify"' +

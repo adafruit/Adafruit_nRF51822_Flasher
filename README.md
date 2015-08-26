@@ -16,8 +16,8 @@
 The flasher utility is a wrapper for various debuggers to flash nRF51822 MCUs with the official Adafruit firmware images.  Currently supported debuggers are:
 
 - [Segger J-Link](https://www.adafruit.com/search?q=J-Link) (via [Adalink](https://github.com/adafruit/Adafruit_Adalink))
-- [STLink/V2](https://www.adafruit.com/product/2548) (via OpenOCD, included in this repo)
-- Raspberry Pi GPIO (via OpenOCD, included in this repo)
+- [STLink/V2](https://www.adafruit.com/product/2548) (via [Adalink](https://github.com/adafruit/Adafruit_Adalink))
+- Raspberry Pi GPIO (via an alpha version of OpenOCD, included in this repo)
 
 This tool hides the implementation details of the different debuggers, and provides a means to flash Bluefruit LE modules with the specified softdevice, bootloader, and firmware via the SWD pins on the nRF51822 (SWDIO and SWCLK).
 
@@ -42,21 +42,21 @@ If you aren't operating from a git repo, you can fill the `Adafruit_BluefruitLE_
 - One of the following SWD debuggers connected to the module via the SWD pins:
 	- [Segger J-Link](https://www.adafruit.com/search?q=J-Link)
 	- [STLink/V2](https://www.adafruit.com/product/2548)
-	- Raspberry Pi GPIO
+	- Raspberry Pi (1 & 2) GPIO
 - [Adalink](https://github.com/adafruit/Adafruit_Adalink) installed on your system (A Python JLinkExe wrapper used to flash the device)
+	- git clone adalink
+	- install and setup adalink
 - [click](http://click.pocoo.org/4/) Python library:
-	- `sudo apt-get install python-pip`
+	- `sudo apt-get install python-pip` or `sudo easy_install pip` then
 	- `sudo pip install click`
 
 ### Jlink Requirements
 
-- git clone adalink
-- install and setup adalink
-- download and install jlink driver
+Download and install jlink driver
 
 ### STLink/V2 Requirements
 
-To use the STLink/V2 you will also need OpenOCD. Pre-built binaries is provided in `openocd-x.x.x` for Windows, Ubuntu, and RPi. If your system is not one of these options, you can build it by yourself following **TODO: create a how-to-build-openocd-md**.
+Install openOCD following the instruction in [Adalink doc](https://github.com/adafruit/Adafruit_Adalink#install-openocd)
 
 On Linux or Raspberry Pi the following steps are required:
 
@@ -85,9 +85,7 @@ GND       | GND
 
 ### RPi GPIO Requirements
 
-You can use the RPi's raw GPIO to bit-bang JTAG/SWD signals, turning your RPi into a native debugger.  A pre-built binary is included in the `openocd-x.x.x/rpi_gpio/openocd` folder.
-
-Install libusb:
+You can also use the RPi's raw GPIO to bit-bang JTAG/SWD signals, turning your RPi into a native debugger. A pre-built alpha version of openOCD binary is included in the `openocd-x.x.x/rpi_gpio/openocd` folder, since the current stable 0.9.0 does not support RPi GPIO with SWD interface yet. To sum up, you don't need install anything else except the libusb as follows
 
 	sudo apt-get install libusb-dev libusb-1.0-0-dev
 
@@ -101,7 +99,7 @@ Since accessing RPi's GPIO requires root access, sudo is required when executing
 
 ![rpi2_swd.png](https://cloud.githubusercontent.com/assets/249515/8327921/59465064-1a96-11e5-802f-827d6707686e.png)
 
-NOTE: Don't forget to connect GND, meaning that there are 4 wires in total.
+NOTE: Don't forget to connect GND, remember that there are 4 wires in total.
 
 ## Usage
 
