@@ -6,7 +6,7 @@ import glob
 import Platform
 import sys
 
-supported_boards = ('blefriend32', 'blespifriend')
+supported_boards = ('blefriend32', 'blespifriend', 'blefriend16')
 supported_programmers = ('jlink', 'stlink', 'rpigpio')
 
 firmware_dir = 'Adafruit_BluefruitLE_Firmware'
@@ -19,30 +19,35 @@ openocd_dict = {'Windows': openocd_dir + '/win64/openocd.exe',
                 'RPi_gpio': openocd_dir + '/rpi_gpio/openocd'}
 
 @click.command()
-@click.option('--jtag', default='jlink', help='[Optional] debugger must be "jlink" or "stlink" or "rpigpio", default is "jlink"')
+@click.option('--jtag', default='jlink', help='[Optional] debugger must be ' + ', '.join('"{0}"'.format(p) for p in supported_programmers) + ', default is "jlink"')
 @click.option('--softdevice', default='8.0.0', help='[Optional] Softdevice version e.g "8.0.0"')
-@click.option('--bootloader', default=2, help='[Optional] Bootloader version e.g "1" or "2".')
-@click.option('--board', help='[Mandatory] must be "blefriend32" or "blespifriend".')
+@click.option('--bootloader', default=2, help='[Optional] Bootloader version e.g "0" or "2".')
+@click.option('--board', help='[Mandatory] must be ' + ', '.join('"{0}"'.format(b) for b in supported_boards))
 @click.option('--firmware', help='[Mandatory] Firmware version e.g "0.6.5".')
 def flash_nrf51(jtag, softdevice, bootloader, board, firmware):
     """Flash Bluefruit module Softdevice + Bootloader + Firmware"""
+
+    if (board is None) or (board not in supported_boards):
+        click.echo( "Please specify the board either " + ', '.join(supported_boards) )
+        sys.exit(1)
+
+    if (board == "blefriend16"):
+        board = "blefriend"
+        bootloader = 0 # force legacy bootloader
+
+    if firmware is None:
+        click.echo("Please specify the firmware version e.g: 0.6.5")
+        sys.exit(1)
+
+    if jtag not in supported_programmers:
+        click.echo("Unsupported programmer, please specify one of following: " + ', '.join(supported_programmers))
+        sys.exit(1)
+
     click.echo('jtag       \t: %s' % jtag)
     click.echo('softdevice \t: %s' % softdevice)
     click.echo('bootloader \t: %s' % bootloader)
     click.echo('board      \t: %s' % board)
     click.echo('firmware   \t: %s' % firmware)
-
-    if (board is None) or (board not in supported_boards):
-        print "Please specify the board either " + ', '.join(supported_boards)
-        sys.exit(1)
-
-    if firmware is None:
-        print "Please specify the firmware version e.g: 0.6.5"
-        sys.exit(1)
-
-    if jtag not in supported_programmers:
-        print "Unsupported programmer, please specify one of following: " + ', '.join(supported_programmers)
-        sys.exit(1)
 
     softdevice_hex = glob.glob(firmware_dir + '/softdevice/*' + softdevice + '_softdevice.hex')[0].replace('\\', '/')
     bootloader_hex = glob.glob(firmware_dir + '/bootloader/*' + str(bootloader) + '.hex')[0].replace('\\', '/')
@@ -51,12 +56,12 @@ def flash_nrf51(jtag, softdevice, bootloader, board, firmware):
 
     click.echo('Writing Softdevice + DFU bootloader + Application to flash memory')
     if (jtag == 'jlink') or (jtag == 'stlink'):
-        print ('adalink -v nrf51822 --programmer ' + jtag +
-                                        ' --wipe --program-hex "' + softdevice_hex + '"' +
-                                        ' --program-hex "' + bootloader_hex + '"' +
-                                        ' --program-hex "' + firmware_hex + '"' +
-                                        ' --program-hex "' + signature_hex + '"')
-        flash_status = subprocess.call('adalink -v nrf51822 --programmer ' + jtag +
+        # click.echo('adalink -v nrf51822 --programmer ' + jtag +
+        #                                 ' --wipe --program-hex "' + softdevice_hex + '"' +
+        #                                 ' --program-hex "' + bootloader_hex + '"' +
+        #                                 ' --program-hex "' + firmware_hex + '"' +
+        #                                 ' --program-hex "' + signature_hex + '"')
+        flash_status = subprocess.call('adalink nrf51822 --programmer ' + jtag +
                                        ' --wipe --program-hex "' + softdevice_hex + '"' +
                                        ' --program-hex "' + bootloader_hex + '"' +
                                        ' --program-hex "' + firmware_hex + '"' +
@@ -89,7 +94,7 @@ def flash_nrf51(jtag, softdevice, bootloader, board, firmware):
                                        ' -c "program ' + signature_hex + ' verify"' +
                                        ' -c reset -c exit', shell=True if platform.system() != 'Windows' else False)
     else:
-        print 'unsupported debugger'
+        click.echo('unsupported debugger')
         sys.exit()
 
     if flash_status != 0:
